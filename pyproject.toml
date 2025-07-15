@@ -9,6 +9,7 @@ description = "AtomWorldBench package"
 authors = [{name = "Tau Lyu"}]
 dependencies = [
     "numpy",
+    "pytest",
     "ase",
     "pymatgen",
     "openai",

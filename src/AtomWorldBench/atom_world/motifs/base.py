@@ -219,7 +219,7 @@ class BaseMotif(ABC, Atoms):
             symbols=atoms.get_chemical_symbols(),
             positions=atoms.get_positions(wrap=False),
             cell=atoms.get_cell(complete=True),
-            pbc=atoms.get_cell(complete=True),
+            pbc=atoms.get_pbc(),
             charges=atoms.get_initial_charges(),
             name=name,
             indices=indices
