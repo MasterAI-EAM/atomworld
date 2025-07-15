@@ -11,7 +11,7 @@ from numpy.typing import ArrayLike
 from ase import Atoms
 
 from .utils import get_species_string
-from ..motif_description_styles import description_style_factory
+
 
 
 class BaseMotif(ABC, Atoms):
@@ -189,6 +189,9 @@ class BaseMotif(ABC, Atoms):
                 f"Description style '{style}' is not allowed for this motif. "
                 f"Allowed styles: {self.allowed_description_styles}."
             )
+        
+        # avoid circular import
+        from ..motif_description_styles import description_style_factory
         description_style = description_style_factory(
             style, **kwargs
         )
