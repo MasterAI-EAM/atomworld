@@ -240,10 +240,10 @@ class BaseMotif(ABC, Atoms):
         )
 
     def extend(self, other):
-        """Extend the motif with another motif or ASE Atoms object.
+        """Extend the motif with another motif object.
 
         Args:
-            other (BaseMotif or Atoms): The motif or ASE Atoms object to extend this motif with.
+            other (BaseMotif or Atoms): The motif object to extend this motif with.
         Returns:
             BaseMotif: A new instance of BaseMotif that combines this motif and the other.
         """
@@ -255,6 +255,8 @@ class BaseMotif(ABC, Atoms):
 
     def __getitem__(self, i):
         """Return a subset of the motif."""
+        if isinstance(i, (int, np.integer)):
+            i = [int(i)]
         atoms = super().__getitem__(i)
         indices = self.indices[i] if self.indices is not None else None
         return self.__class__.from_atoms(

@@ -10,3 +10,4 @@ raw_data/
 local.models.yaml
 
 run.log
+htmlcov/

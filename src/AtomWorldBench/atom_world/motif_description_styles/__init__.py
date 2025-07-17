@@ -1,7 +1,9 @@
 from .base import BaseDescriptionStyle
 
 from ...utils.class_utils import derived_class_factory, class_name_from_str
-
+# should be import here to avoid empty subclass list
+from .coord import CoordDescriptionStyle
+from .index import IndexDescriptionStyle
 
 def description_style_factory(
         style_name: str,
