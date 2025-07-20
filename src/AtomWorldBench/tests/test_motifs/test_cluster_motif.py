@@ -23,7 +23,7 @@ class TestClusterMotif(BaseMotifTests):
             pbc=True,
             charges=[1, -1, 2]
         )
-        return motif_factory("cluster", atoms, indices=[0, 1, 8])
+        return motif_factory("cluster", atoms, indices=np.array([0, 1, 8]))
 
     @pytest.fixture
     def expected_frac_coords(self):

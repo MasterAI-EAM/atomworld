@@ -88,6 +88,8 @@ class SiteDetector(BaseDetector):
         symbols_valid = symbols[indices_j_valid]
         charges_valid = atoms_modified.get_initial_charges()[indices_j_valid]
 
+        charges_valid = charges_valid.reshape(-1, 1) # avoid the "TypeError: len() of unsized object" when creating new SiteMotif
+
         deduplicated_motifs = []
         for ii in range(len(symbols_valid)):
             motif = SiteMotif(

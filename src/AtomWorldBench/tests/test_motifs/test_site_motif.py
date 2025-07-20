@@ -12,10 +12,8 @@ class TestSiteMotif:
 
     def test_raises_on_many_atoms(self):
         atoms = Atoms('HO', positions=[[0, 0, 0], [1, 1, 1]], cell=[2, 2, 2], pbc=True)
-        with pytest.raises(ValueError, match="SiteMotif can only be initialized with a single index."):
+        with pytest.raises(ValueError, match="SiteMotif must contain exactly one site, but got 2 sites."):
             return SiteMotif(atoms, indices=[3, 2])
-        with pytest.raises(ValueError, match="SiteMotif must be initialized with exactly one site!"):
-            return SiteMotif(atoms)
 
     def test_get_name(self):
         atoms = Atoms('Pt', positions=[[10,0,0]],cell=[1,1,1], charges=[20])

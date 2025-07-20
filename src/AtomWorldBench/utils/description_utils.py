@@ -18,7 +18,10 @@ def get_species_string(
         str: Formatted species string, e.g., "H+"
     """
     if not isinstance(charge, (int, type(None))):
-        raise TypeError("Charge must be an integer or None.")
+        if isinstance(charge, float):
+            charge = int(charge)
+        else:
+            raise TypeError("Charge must be an integer or None.")
     if charge is not None and charge != 0:
         if charge == 1:
             return f"{element_symbol} +"

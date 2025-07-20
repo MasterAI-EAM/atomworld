@@ -11,7 +11,6 @@ import numpy as np
 from numpy.typing import ArrayLike
 from ase import Atoms
 
-from ..motif_description_styles import description_style_factory
 from ...utils.description_utils import get_species_string
 from ...utils.coord_utils import check_integer_translation
 
@@ -293,10 +292,12 @@ class BaseMotif(ABC, Atoms):
 
     def __getitem__(self, i):
         """Return a subset of the motif."""
-        if isinstance(i, (int, np.integer)):
-            i = [int(i)]
-        atoms = super().__getitem__(i)
-        indices = self.indices[i] if self.indices is not None else None
+        if isinstance(i, int):      # Avoid ase returning atom object rather than atoms
+            atoms = super().__getitem__([i])
+            indices = [self.indices[i]] if self.indices is not None else None
+        else:                       # Support list of i
+            atoms = super().__getitem__(i)
+            indices = [self.indices[j] if self.indices is not None else None for j in i]
         return self.__class__.from_atoms(
             atoms,
             name=None, # Reset name to default to avoid conflicts with the original motif name.

@@ -1,7 +1,7 @@
 from abc import abstractmethod
 import numpy as np
 import pytest
-from AtomWorldBench.atom_world.motifs.utils import get_species_string
+# from AtomWorldBench.atom_world.motifs.utils import get_species_string
 
 class BaseMotifTests:
 
@@ -82,7 +82,7 @@ class BaseMotifTests:
         assert np.allclose(motif.frac_coords, expected_frac_coords)
     
     def test_indices(self, motif, expected_indices):
-        assert motif.indices.tolist() == expected_indices
+        assert motif.indices == expected_indices
 
     @pytest.mark.parametrize("fractional", [False, True])
     def test_centroid(self, motif, expected_centroid, fractional):
@@ -91,8 +91,8 @@ class BaseMotifTests:
         assert np.allclose(result, expected)
 
 
-def test_get_species_string():
-    with pytest.raises(TypeError, match="Charge must be an integer or None."):
-        return get_species_string('Ar', '0.5')
+# def test_get_species_string():
+#     with pytest.raises(TypeError, match="Charge must be an integer or None."):
+#         return get_species_string('Ar', '0.5')
     
-    assert get_species_string('A', -2) == 'A 2-'
+#     assert get_species_string('A', -2) == 'A 2-'

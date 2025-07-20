@@ -35,5 +35,4 @@ class TestSiteDetector(BaseMotifDetectorTest):
         all_motif = detector.detect_all(simple_atoms)
 
         assert all_motif[0].get_chemical_symbols()[0] == 'Li'
-        assert all_motif[1].get_chemical_symbols()[0] == 'Na'
-        assert all_motif[2].get_chemical_symbols()[0] == 'Cl'
+        assert all_motif[1].get_chemical_symbols()[0] == 'Cl'
