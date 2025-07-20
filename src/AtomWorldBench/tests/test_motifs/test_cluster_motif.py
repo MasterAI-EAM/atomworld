@@ -3,6 +3,7 @@ import numpy as np
 from ase import Atoms
 from AtomWorldBench.atom_world.motifs.cluster import ClusterMotif
 from AtomWorldBench.tests.test_motifs.common_test import BaseMotifTests 
+from AtomWorldBench.atom_world.motifs import motif_factory
 from unittest.mock import MagicMock
 
 
@@ -22,7 +23,7 @@ class TestClusterMotif(BaseMotifTests):
             pbc=True,
             charges=[1, -1, 2]
         )
-        return ClusterMotif(atoms, indices=[0, 1, 8])
+        return motif_factory("cluster", atoms, indices=[0, 1, 8])
 
     @pytest.fixture
     def expected_frac_coords(self):

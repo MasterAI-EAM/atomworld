@@ -1,7 +1,7 @@
 from abc import abstractmethod
 import numpy as np
 import pytest
-from ase import Atoms
+from AtomWorldBench.atom_world.motifs.utils import get_species_string
 
 class BaseMotifTests:
 
@@ -89,3 +89,10 @@ class BaseMotifTests:
         expected = expected_centroid[fractional]
         result = motif.get_centroid(fractional=fractional)
         assert np.allclose(result, expected)
+
+
+def test_get_species_string():
+    with pytest.raises(TypeError, match="Charge must be an integer or None."):
+        return get_species_string('Ar', '0.5')
+    
+    assert get_species_string('A', -2) == 'A 2-'

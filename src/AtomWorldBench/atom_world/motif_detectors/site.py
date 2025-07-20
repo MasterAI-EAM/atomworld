@@ -73,6 +73,9 @@ class SiteDetector(BaseDetector):
         )
         symbols_valid = symbols[indices_j_valid]
         charges_valid = atoms_modified.get_initial_charges()[indices_j_valid]
+        
+        # charges[ii] should have len(). Thus charge_valid should be in the form such as [[1.]], [[1.],[3.]]
+        charges_valid = charges_valid.reshape(-1, 1)
 
         return [
             SiteMotif(
@@ -82,7 +85,7 @@ class SiteDetector(BaseDetector):
                 pbc=atoms.pbc,
                 charges=charges_valid[ii],
                 name=None,  # Default name will be generated in the SiteMotif class.
-                indices=indices_j_valid[ii],
+                indices=[indices_j_valid[ii]],
             ) for ii in range(len(symbols_valid))
         ]
 

@@ -41,7 +41,7 @@ class SiteMotif(BaseMotif):
             indices (list of int, optional): Original indices from structure.
                 Indices should always be provided, if the motif belongs to a specific structure.
         """
-        if len(indices) is not None and len(indices) > 1:
+        if indices is not None and len(indices) > 1:
             raise ValueError(
                 "SiteMotif can only be initialized with a single index."
             )
@@ -54,6 +54,6 @@ class SiteMotif(BaseMotif):
     def _get_default_name(self) -> str:
         """Generate a default name for the motif based on its species and coordinates."""
         if self.get_initial_charges()[0] == 0:
-            return f"an atom {self.species_strings[0]}"
+            return f"one {self.species_strings[0]} atom"
         else:
-            return f"a species {self.species_strings[0]}"
+            return f"one {self.species_strings[0]} ion"

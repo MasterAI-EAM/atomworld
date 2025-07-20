@@ -3,6 +3,7 @@ import numpy as np
 from ase import Atoms
 from AtomWorldBench.atom_world.motifs.bond import BondMotif
 from AtomWorldBench.tests.test_motifs.common_test import BaseMotifTests 
+from AtomWorldBench.atom_world.motifs import motif_factory
 
 class TestBondMotif(BaseMotifTests):
     @pytest.fixture
@@ -13,8 +14,8 @@ class TestBondMotif(BaseMotifTests):
     @pytest.fixture
     def motif(self):
         atoms = Atoms('HO', positions=[[0, 0, 0], [1, 1, 1]], cell=[2, 2, 2], pbc=True)
-        return BondMotif(atoms, indices=[0, 1])
-
+        return motif_factory("bond", atoms, indices=[0, 1])
+    
     @pytest.fixture
     def expected_frac_coords(self):
         return np.array([[0.0, 0.0, 0.0], [0.5, 0.5, 0.5]])
