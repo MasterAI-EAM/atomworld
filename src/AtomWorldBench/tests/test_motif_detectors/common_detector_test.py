@@ -7,15 +7,9 @@ from ase import Atoms
 class BaseMotifDetectorTest:
 
     @pytest.fixture
+    @abstractmethod
     def simple_atoms(self):
-        atoms = Atoms(
-            symbols=["Li", "Na", "Cl"],
-            positions=[[0, 0, 0], [2, 0, 0], [5, 0, 0]],
-            cell=[10, 10, 10],
-            pbc=True,
-            charges=[1, 3, -1]
-        )
-        return atoms
+        pass
     
     @pytest.fixture
     @abstractmethod
@@ -24,6 +18,10 @@ class BaseMotifDetectorTest:
     
     @abstractmethod
     def test_detect_around_frac_coords(self, simple_atoms, detector):
+        pass
+
+    @abstractmethod
+    def test_detect_one(self, simple_atoms, detector):
         pass
 
     

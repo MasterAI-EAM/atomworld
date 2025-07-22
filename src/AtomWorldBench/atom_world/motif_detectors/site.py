@@ -62,7 +62,7 @@ class SiteDetector(BaseDetector):
 
         # Add a dummy atom to the structure at the given fractional coordinates to mark.
         atoms_modified = atoms.copy()
-        atoms_modified += Atoms("X", positions=[frac_coords], cell=atoms.cell, pbc=atoms.pbc)
+        atoms_modified += Atoms("X", scaled_positions=[frac_coords], cell=atoms.cell, pbc=atoms.pbc)
         # Dummy atom is added to the end of the atoms list.
         dummy_index = len(atoms_modified) - 1
 

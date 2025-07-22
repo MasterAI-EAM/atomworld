@@ -49,4 +49,4 @@ def get_prompts(action_name, data_folder, num_prompts=20, save_folder: str = "pr
 
 if __name__ == "__main__":
 
-    get_prompts("insert_between_atoms_action", "D:\AI\PythonProjects\AtomWorldBench\src\data", num_prompts=20, save_folder="prompts")
+    get_prompts("insert_between_atoms_action", "D:/AI/PythonProjects/AtomWorldBench/src/data", num_prompts=20, save_folder="prompts")

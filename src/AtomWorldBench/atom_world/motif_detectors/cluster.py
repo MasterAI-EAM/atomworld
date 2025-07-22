@@ -175,6 +175,8 @@ class ClusterDetector(BaseDetector):
             current_available_neighbors = [deepcopy(site_motifs)]
             saved_clusters = {0: [empty_cluster]}
         else:
+            if not site_motifs: # if there's no atoms around the frac_coord, return to avoid error in argmin for empty list
+                return []
             dists = [np.linalg.norm(site.cart_coords - frac_coords @ atoms.cell) for site in site_motifs]
             imin = np.argmin(dists)
             center_site = site_motifs[imin]
@@ -182,7 +184,7 @@ class ClusterDetector(BaseDetector):
                 symbols=center_site.get_chemical_symbols(),
                 positions=center_site.get_positions(wrap=False),
                 cell=center_site.get_cell(complete=True),
-                pbc=center_site.get_cell(complete=True),
+                pbc=center_site.get_pbc(),
                 charges=center_site.get_initial_charges(),
                 name=center_site.name,
                 indices=center_site.indices
@@ -291,7 +293,7 @@ class ClusterDetector(BaseDetector):
             valid_indices = self._get_symbol_valid_indices(a)
             rand_idx = self.rng.choice(valid_indices)
             rand_indices = [rand_idx]
-            c = ClusterMotif.from_atoms(a[[rand_idx]], indices=[rand_idx])
+            cluster = ClusterMotif.from_atoms(a[[rand_idx]], indices=[rand_idx])
             for _ in range(size - 1):
                 # Randomly select a site to grow the cluster around.
                 neighbor_site_motifs = SiteDetector(
@@ -305,9 +307,9 @@ class ClusterDetector(BaseDetector):
                     int(site.indices[0]) for site in deduplicated_site_motifs
                 ]
                 rand_nn_idx = int(self.rng.integers(len(deduplicated_site_indices)))
-                c += deduplicated_site_motifs[rand_nn_idx]
+                cluster += deduplicated_site_motifs[rand_nn_idx]
                 rand_indices += [deduplicated_site_indices[rand_nn_idx]]
-            return c
+            return cluster
 
         for _ in range(n_attempts):
             cluster = _detect_attempt(atoms)

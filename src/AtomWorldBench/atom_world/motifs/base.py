@@ -6,6 +6,7 @@ from typing import List, Optional, Dict, Tuple
 from abc import ABC, abstractmethod
 from functools import cached_property
 from collections import Counter
+import copy
 
 import numpy as np
 from numpy.typing import ArrayLike
@@ -75,6 +76,22 @@ class BaseMotif(ABC, Atoms):
         This method can be overridden by subclasses to perform additional initialization.
         """
         pass
+
+    def copy(self):
+        """Return a copy."""
+        motif = self.__class__(
+            self.get_atoms(), 
+            name=self.name, 
+            indices=self.indices, 
+            to_add=self.to_add, 
+            allow_translation_equivalence=self.allow_translation_equivalence
+        )
+
+        motif.arrays = {}
+        for name, a in self.arrays.items():
+            motif.arrays[name] = a.copy()
+        motif.constraints = copy.deepcopy(self.constraints)
+        return motif
 
     @property
     def species_strings(self) -> List[str]:
@@ -341,9 +358,13 @@ class BaseMotif(ABC, Atoms):
             frac1 = self.frac_coords[group1]
             frac2 = other.frac_coords[group2]
             # Allow permutation within species groups, but check for integer translation.
-            sorted_args1, sorted_args2, taus = check_integer_translation(frac1, frac2, atol=1e-6)
-            if taus is None:
+            check_results = check_integer_translation(frac1, frac2, atol=1e-6)
+            if check_results is not None:
+                sorted_args1, sorted_args2, taus = check_results
+            else:
                 return False
+            # if taus is None:
+            #     return False
             if prev_taus is None:
                 prev_taus = taus
             else:
@@ -355,8 +376,9 @@ class BaseMotif(ABC, Atoms):
             sorted_indices1.extend(group1[sorted_args1])
             sorted_indices2.extend(group2[sorted_args2])
 
+        # some initial motif might not have initial_charges, which can cause errors
         return np.allclose(
-            self.arrays['initial_charges'][sorted_indices1],
-            other.arrays['initial_charges'][sorted_indices2],
+            self.get_initial_charges()[sorted_indices1],
+            other.get_initial_charges()[sorted_indices2],
             atol=1e-6
         )

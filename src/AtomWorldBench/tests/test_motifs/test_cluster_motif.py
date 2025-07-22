@@ -8,6 +8,7 @@ from unittest.mock import MagicMock
 
 
 class TestClusterMotif(BaseMotifTests):
+    cls = ClusterMotif
 
     @pytest.fixture
     def single_atom_motif(self):
@@ -143,3 +144,20 @@ class TestClusterMotif(BaseMotifTests):
     def test_describe_invalid_style(self, motif):
         with pytest.raises(ValueError, match="Description style 'wtf' is not allowed"):
             motif.describe(style="wtf")
+
+    def test_describe_to_add(self, motif):
+        motif.to_add = True
+        assert motif.describe(style='coord') == "a triplet of atoms/species Na +, Cl -, K 2+"
+
+    def test_get_site_motifs(self, motif):
+        site_motifs = motif.site_motifs
+        assert len(site_motifs) == 3
+        assert site_motifs[0].get_chemical_symbols()[0] == 'Na'
+        assert site_motifs[1].get_chemical_symbols()[0] == 'Cl'
+        assert site_motifs[2].get_chemical_symbols()[0] == 'K'
+
+    def test_eq_invalid_len(self, motif):
+        atoms = motif.get_atoms()
+        atoms.append("F")
+        new_motif = self.cls.from_atoms(atoms)
+        assert motif != new_motif

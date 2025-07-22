@@ -4,6 +4,8 @@ from AtomWorldBench.atom_world.motifs.site import SiteMotif
 from AtomWorldBench.atom_world.motifs import motif_factory
 
 class TestSiteMotif:
+    cls = SiteMotif
+    
     @pytest.fixture
     def single_atom_motif(self):
         atoms = Atoms('H', positions=[[0, 0, 0]], cell=[1, 1, 1], pbc=False)

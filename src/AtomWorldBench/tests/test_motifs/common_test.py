@@ -1,9 +1,12 @@
 from abc import abstractmethod
 import numpy as np
 import pytest
+from ase.atoms import Atoms
+from AtomWorldBench.atom_world.motifs.base import BaseMotif
 # from AtomWorldBench.atom_world.motifs.utils import get_species_string
 
 class BaseMotifTests:
+    cls = None
 
     @pytest.fixture
     @abstractmethod
@@ -90,6 +93,58 @@ class BaseMotifTests:
         result = motif.get_centroid(fractional=fractional)
         assert np.allclose(result, expected)
 
+    def test_eq_valid(self, motif):
+        atoms = motif.get_atoms()
+        new_motif = self.cls.from_atoms(atoms)
+        assert motif == new_motif
+
+        sx = atoms.get_scaled_positions()
+        atoms.set_scaled_positions(sx+np.array([1,2,7]))
+        new_motif = self.cls.from_atoms(atoms)
+        assert motif == new_motif
+
+    def test_eq_invalid_translation(self, motif):
+        atoms = motif.get_atoms()
+        sx = atoms.get_scaled_positions()
+        atoms.set_scaled_positions(sx+np.array([1,2,7.5]))
+        new_motif = self.cls.from_atoms(atoms)
+        assert motif != new_motif
+
+    def test_eq_invalid_cls(self, motif):
+        atoms = Atoms("NB", positions=np.random.rand(2,3), cell=[5,5,5])
+        class DummyMotif(BaseMotif):
+            def _get_default_name(self):
+                return "dummy"
+        dummy_motif = DummyMotif.from_atoms(atoms)
+        assert motif != dummy_motif
+
+    def test_eq_invalid_cell(self, motif):
+        atoms = motif.get_atoms()
+        atoms.set_cell([2,3,4])
+        new_motif = self.cls.from_atoms(atoms)
+
+        assert motif != new_motif
+
+    def test_eq_invalid_type(self, motif):
+        atoms = motif.get_atoms()
+        new_symbols = atoms.symbols
+        new_symbols[0] = 'X'
+        new_motif = self.cls.from_atoms(atoms)
+
+        assert motif != new_motif
+
+    def test_eq_invalid_translation_equi(self, motif):
+        motif.allow_translation_equivalence = False
+        atoms = motif.get_atoms()
+        new_motif = self.cls.from_atoms(atoms)
+        assert motif == new_motif
+
+        sx = atoms.get_scaled_positions()
+        atoms.set_scaled_positions(sx+np.array([1,2,7]))
+        new_motif = self.cls.from_atoms(atoms)
+        assert motif != new_motif
+
+        
 
 # def test_get_species_string():
 #     with pytest.raises(TypeError, match="Charge must be an integer or None."):
