@@ -170,6 +170,7 @@ class ClusterDetector(BaseDetector):
                 symbols=[],
                 positions=[],
                 cell=atoms.cell,
+                indices=[]
             )
             current_clusters = [empty_cluster]
             current_available_neighbors = [deepcopy(site_motifs)]
