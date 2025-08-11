@@ -3,7 +3,7 @@
 from .base import BaseDescriptionStyle
 
 from ..motifs.base import BaseMotif
-from src.AtomWorldBench.utils.description_utils import format_arraylike
+from AtomWorldBench.utils.description_utils import format_arraylike
 
 class CoordDescriptionStyle(BaseDescriptionStyle):
     """Description style for motifs in atomic coordinates.

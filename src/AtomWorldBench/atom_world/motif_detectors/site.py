@@ -78,7 +78,10 @@ class SiteDetector(BaseDetector):
         symbols = np.array(atoms_modified.get_chemical_symbols())
         # Filter indices to only include those that are within the cutoff distance from the dummy atom,
         # and that match the specified symbols if provided.
-        indices_valid = (indices_i == dummy_index) & np.vectorize(lambda x: x in self.symbols)(symbols[indices_j])
+        if self.symbols is None: # to avoid cluster_detector's symbol is None
+            indices_valid = (indices_i == dummy_index)
+        else:
+            indices_valid = (indices_i == dummy_index) & np.vectorize(lambda x: x in self.symbols)(symbols[indices_j])
         indices_j_valid = indices_j[indices_valid]
         offsets_valid = offsets[indices_valid, :]
         positions_valid = (

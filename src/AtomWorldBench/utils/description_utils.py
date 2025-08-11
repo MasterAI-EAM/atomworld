@@ -3,6 +3,7 @@ from collections.abc import Iterable
 from typing import Optional
 
 from numpy.typing import ArrayLike
+import numbers
 
 
 def get_species_string(
@@ -46,9 +47,12 @@ def format_arraylike(obj: ArrayLike, precision: int = 4):
     Returns:
         str: formatted string of the array-like object.
     """
-    if isinstance(obj, (int, float)):
-        if precision > 0:
+    if isinstance(obj, numbers.Number):
+        # Automatically cast to float or int for formatting
+        if precision > 0 and isinstance(obj, float):
             return f"{obj:.{precision}f}"
+        elif precision > 0 and isinstance(obj, numbers.Integral):
+            return f"{float(obj):.{precision}f}"
         else:
             return str(int(obj))
     elif isinstance(obj, str):

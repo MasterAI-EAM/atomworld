@@ -292,6 +292,8 @@ class ClusterDetector(BaseDetector):
         def _detect_attempt(a):
             # Perform a single detection attempt.
             valid_indices = self._get_symbol_valid_indices(a)
+            if not valid_indices:
+                return None
             rand_idx = self.rng.choice(valid_indices)
             rand_indices = [rand_idx]
             cluster = ClusterMotif.from_atoms(a[[rand_idx]], indices=[rand_idx])

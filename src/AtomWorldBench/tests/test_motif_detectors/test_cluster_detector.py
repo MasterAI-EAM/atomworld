@@ -47,10 +47,31 @@ class TestClusterDetector(BaseMotifDetectorTest):
         all_motifs = detector.detect_around_frac_coords(simple_atoms, frac_coords)
         assert len(all_motifs) == expected_len
 
-    @pytest.mark.parametrize("size",[None, 3])
-    def test_detect_one(self, simple_atoms, detector, size):
+    @pytest.mark.parametrize("size",[None, 1, 3, 4])
+    def test_detect_one_valid(self, simple_atoms, detector, size):
         motif = detector.detect_one(simple_atoms, size)
         assert isinstance(motif, ClusterMotif)
+        if size is not None:
+            assert motif.get_global_number_of_atoms() == size
+
+    def test_detect_one_none_atom_symbol(self, detector):
+        simple_atoms = Atoms(
+            positions=[[0, 0, 0], [1, 0, 0], [0, 1, 0], [0,0,1], [1, 3, 0]],
+            cell=[10, 10, 10],
+            pbc=True
+        )
+        motif = detector.detect_one(simple_atoms, size=1)
+        assert motif is None
+
+    def test_detect_one_none_detector_symbol(self, simple_atoms):
+        detector = ClusterDetector(cutoff=3.0, max_cluster_size=3, max_cluster_radius=3, symbols=None)
+        motif = detector.detect_one(simple_atoms, size=2)
+        assert isinstance(motif, ClusterMotif)
+
+    def test_detect_one_invalid(self, simple_atoms, detector):
+        motif = detector.detect_one(simple_atoms, size=16)
+        assert motif is None
+
 
 
 
